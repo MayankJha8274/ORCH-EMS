@@ -6,6 +6,7 @@ const connectDB = require('./config/db');
 const emergencyRoutes = require('./routes/emergencyRoutes');
 const ambulanceRoutes = require('./routes/ambulanceRoutes');
 const hospitalRoutes = require('./routes/hospitalRoutes');
+const dispatchRoutes = require('./routes/dispatchRoutes');
 
 
 const app = express();
@@ -16,6 +17,7 @@ connectDB();
 app.use('/api/emergencies', emergencyRoutes);
 app.use('/api/ambulances', ambulanceRoutes);
 app.use('/api/hospitals', hospitalRoutes);
+app.use('/api/dispatch', dispatchRoutes);
 
 app.get('/', (req, res) => {
     res.send('Server is running');
