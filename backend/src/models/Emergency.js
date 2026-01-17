@@ -1,30 +1,20 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const EmergencySchema = new mongoose.Schema({
-  type: { type: String, required: true },
-  note: { type: String },
-  location: { type: String },
-  createdAt: { type: Date, default: Date.now }
+const emergencySchema = new mongoose.Schema({
+  caller: String,
+  severity: Number, // 1–10 ( emergency level )
+  location: {
+    lat: Number,
+    lng: Number
+  },
+  status: {
+    type: String,
+    default: "PENDING"
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
 });
 
-module.exports = mongoose.model('Emergency', EmergencySchema);
-
-// const mongoose = require("mongoose");
-
-// const emergencySchema = new mongoose.Schema({
-//   severity: Number, // 1–10 ( emergency level )
-//   location: {
-//     lat: Number,
-//     lng: Number
-//   },
-//   status: {
-//     type: String,
-//     default: "PENDING"
-//   },
-//   createdAt: {
-//     type: Date,
-//     default: Date.now
-//   }
-// });
-
-// module.exports = mongoose.model("Emergency", emergencySchema);
+module.exports = mongoose.model("Emergency", emergencySchema);

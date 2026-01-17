@@ -4,7 +4,7 @@ const dijkstra = require('./dijkstraAdapter');
 async function getETA(from, to, opts = {}) {
   const timeoutMs = opts.timeoutMs || 3500;
   // call mapbox with timeout
-  const mapboxPromise = mapbox.getRoute(from, to);
+  const mapboxPromise = mapbox.mapboxGetRoute(from, to);
   const timeoutPromise = new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), timeoutMs));
   try {
     const res = await Promise.race([mapboxPromise, timeoutPromise]);
