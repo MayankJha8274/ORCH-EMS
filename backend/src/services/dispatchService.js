@@ -4,6 +4,7 @@ const Ambulance = require('../models/Ambulance');
 const Hospital = require('../models/Hospital');
 const DispatchLog = require('../models/DispatchLog');
 const { pickBest } = require('./decisionEngine');
+const { getIO } = require('./socket');
 
 async function dispatchEmergency(emergencyId) {
   const session = await mongoose.startSession();
@@ -46,6 +47,14 @@ async function dispatchEmergency(emergencyId) {
 
     await session.commitTransaction();
     session.endSession();
+
+    // emit realtime event
+    try {
+      const io = getIO();
+      io.emit('dispatch.created', { dispatch: log[0], ambulance: amb, hospital: hosp, emergencyId: emergency._id });
+    } catch (e) {
+      // socket not initialized, ignore
+    }
 
     return { success: true, dispatch: log[0], ambulance: amb, hospital: hosp };
   } catch (err) {

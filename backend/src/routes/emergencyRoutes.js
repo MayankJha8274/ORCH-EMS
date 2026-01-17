@@ -19,8 +19,16 @@ router.post('/', async (req, res) => {
         if (!payload || !payload.type) {
             return res.status(400).json({ message: 'type is required' });
         }
-        const doc = await Emergency.create(payload);
-        res.status(201).json({ message: 'Emergency created', data: doc });
+                const doc = await Emergency.create(payload);
+                // emit realtime event (best-effort)
+                try {
+                    const { getIO } = require('../services/socket');
+                    const io = getIO();
+                    io.emit('emergency.created', { emergency: doc });
+                } catch (e) {
+                    // ignore if sockets not ready
+                }
+                res.status(201).json({ message: 'Emergency created', data: doc });
     } catch (err) {
         res.status(500).json({ message: 'Save failed', error: err.message });
     }
